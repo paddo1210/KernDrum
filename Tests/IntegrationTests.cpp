@@ -24,7 +24,9 @@ int main(int argc,char** argv){
  // Host automation uses exactly the same normalized parameter path as a DAW.
  p.state.getParameter("v1_pitch")->setValueNotifyingHost(.8f);check(std::abs(p.state.getParameter("v1_pitch")->getValue()-.8f)<1e-6,"normalized host automation");
  p.setStateInformation("bad",3);check(std::isfinite(p.state.getRawParameterValue("v1_pitch")->load()),"bad state safely ignored");
- {std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());editor->setSize(960,720);editor->setSize(1600,1100);check(editor->getWidth()==1600,"editor creates and resizes");}
+ {std::unique_ptr<juce::AudioProcessorEditor> editor(p.createEditor());editor->setSize(960,720);editor->setSize(1600,1100);check(editor->getWidth()==1600,"editor creates and resizes");
+  if(argc>2){p.loadKit(0);editor->setSize(1120,800);editor->setVisible(true);auto image=editor->createComponentSnapshot(editor->getLocalBounds());auto stream=juce::File(juce::String::fromUTF8(argv[2])).createOutputStream();check(stream!=nullptr,"screenshot file opens");stream->setPosition(0);stream->truncate();juce::PNGImageFormat png;check(png.writeImageToStream(image,*stream),"editor screenshot renders");}
+ }
  if(argc>1){
   juce::VST3PluginFormat format;juce::OwnedArray<juce::PluginDescription> descriptions;
   format.findAllTypesForFile(descriptions,juce::String::fromUTF8(argv[1]));check(descriptions.size()==1,"VST3 bundle scans as one instrument");

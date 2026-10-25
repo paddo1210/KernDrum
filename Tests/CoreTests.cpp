@@ -20,6 +20,14 @@ int main(){
   check(count==16,"16 triggers per four beats");
  }
  check(kern::wrappedStep(-1)==15,"negative pre-roll wraps");
+ // Reconstructing PPQ at block boundaries must not duplicate/drop steps.
+ for(int block:{32,127,512,2048}){
+  const double inc=123./(60*48000.);int count=0;int64_t last=-1;
+  for(int start=0;start<200000;start+=block){const double beat=start*inc;for(int i=0;i<block && start+i<200000;++i){const double q=beat+i*inc;auto now=kern::absoluteStep(q,.61);if(now!=kern::absoluteStep(q-inc,.61)){check(now>last,"no repeated event across block boundaries");last=now;++count;}}}
+  check(count==35,"block-size-independent trigger count");
+ }
+ {kern::Engine e;e.prepare(48000);auto patch=kern::factory[0];patch[kern::mute]=1;e.drum[0].setPatch(patch,true);e.trigger(0,1);double energy=0;for(int n=0;n<48000;++n){auto x=e.render(1);energy+=x[0]*x[0]+x[1]*x[1];}check(energy==0,"muted voice is silent");}
+ {kern::Engine e;e.prepare(48000);auto patch=kern::factory[1];patch[kern::solo]=1;e.drum[1].setPatch(patch,true);e.trigger(0,1);double energy=0;for(int n=0;n<48000;++n){auto x=e.render(1);energy+=x[0]*x[0]+x[1]*x[1];}check(energy==0,"solo excludes other voices");}
  kern::Engine quiet,loud;quiet.prepare(48000);loud.prepare(48000);quiet.trigger(0,.2f);loud.trigger(0,1);double a=0,b=0;
  for(int n=0;n<10000;++n){auto x=quiet.render(.8f),y=loud.render(.8f);a+=x[0]*x[0];b+=y[0]*y[0];}check(b>a*2,"velocity affects energy");
  std::cout<<"PASS: factory voices, tails, finite stereo, velocity, swing timing at 3 tempos, pre-roll\n";
