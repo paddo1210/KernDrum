@@ -1,6 +1,8 @@
 #pragma once
 #include <juce_audio_utils/juce_audio_utils.h>
 #include "Engine.h"
+static_assert(std::atomic<float>::is_always_lock_free && std::atomic<double>::is_always_lock_free && std::atomic<bool>::is_always_lock_free,
+              "KernDrum requires lock-free audio-thread atomics (64-bit target)");
 
 class KernDrumProcessor final : public juce::AudioProcessor {
 public:

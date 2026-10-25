@@ -10,7 +10,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout KernDrumProcessor::layout() 
  juce::AudioProcessorValueTreeState::ParameterLayout result;
  auto add=[&](const juce::String& id,const juce::String& title,float lo,float hi,float def,float skew=1.f) {
   juce::NormalisableRange<float> range(lo,hi); range.skew=skew;
-  result.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{id,1},title,range,def));
+  auto attributes=juce::AudioParameterFloatAttributes().withStringFromValueFunction([](float x,int){return juce::String(x,std::abs(x)>=100.f?0:(std::abs(x)>=10.f?1:2));});
+  result.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{id,1},title,range,def,attributes));
  };
  for(int v=0;v<8;++v) for(int c=0;c<kern::numControls;++c) {
   const auto id=voiceID(v,c), title=juce::String(kern::names[v])+" "+titles[c];

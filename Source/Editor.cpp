@@ -23,6 +23,7 @@ KernDrumEditor::KernDrumEditor(KernDrumProcessor& p):AudioProcessorEditor(p),gri
  subtitle.setText("SYNTHETIC RHYTHM INSTRUMENT  /  01",juce::dontSendNotification);subtitle.setColour(juce::Label::textColourId,dim);
  for(auto* c:std::initializer_list<juce::Component*>{&title,&subtitle,&voiceTitle,&status,&help,&grid,&sequencer,&pattern,&kit,&copy,&clear,&reset,&master,&swing})addAndMakeVisible(c);
  voiceTitle.setFont(juce::FontOptions(20.f,juce::Font::bold));
+ status.setText("DAW stopped",juce::dontSendNotification);
  for(int v=0;v<8;++v){
   auto& b=voiceButtons[v];b.setButtonText(juce::String(v+1)+"  "+kern::names[v]);b.setClickingTogglesState(false);b.onClick=[this,v]{selectVoice(v);};addAndMakeVisible(b);
   auto& t=triggerButtons[v];t.setButtonText("Hit");t.setTooltip("Audition / MIDI note "+juce::String(36+v));t.onClick=[this,v]{processor.audition(v);};addAndMakeVisible(t);
@@ -71,8 +72,8 @@ void KernDrumEditor::resized(){
 void KernDrumEditor::paint(juce::Graphics& g){
  g.fillAll(bg);g.setColour(panel);g.fillRoundedRectangle(14.f,103.f,float(getWidth()-28),340.f,12.f);
  g.fillRoundedRectangle(14.f,515.f,float(getWidth()-28),float(getHeight()-558),12.f);
- const float x=float(getWidth()-26);g.setColour(juce::Colour(0xff26383f));g.fillRect(x-160,77.f,160.f,5.f);g.fillRect(x-160,86.f,160.f,5.f);
- g.setColour(accent);g.fillRect(x-160,77.f,160*processor.meterL.load(),5.f);g.fillRect(x-160,86.f,160*processor.meterR.load(),5.f);
+ const float x=float(getWidth()-500);g.setColour(juce::Colour(0xff26383f));g.fillRect(x,77.f,320.f,5.f);g.fillRect(x,86.f,320.f,5.f);
+ g.setColour(accent);g.fillRect(x,77.f,320*processor.meterL.load(),5.f);g.fillRect(x,86.f,320*processor.meterR.load(),5.f);
 }
 void KernDrumEditor::timerCallback(){
  status.setText(processor.hostPlaying.load()?juce::String(processor.displayedBpm.load(),1)+" BPM / HOST":"DAW stopped",juce::dontSendNotification);
