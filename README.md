@@ -2,6 +2,8 @@
 
 Eigenständiges synthetisches Drum-Instrument für Windows x64: acht Stimmen, vier Patterns mit je acht Spuren und 16 Steps, VST3 und zusätzliche Standalone-Anwendung. Eigener Code, eigener Name und eigene Oberfläche. Die Idee einer direkt bedienbaren Drum-Synthese mit Pattern-Sequencer ist von [Microtonic](https://soniccharge.com/microtonic) inspiriert; KernDrum verwendet keine Sounds, Grafiken oder Algorithmen dieses Produkts und ist kein klanggetreuer Nachbau.
 
+![KernDrum-Oberfläche](Preview.png)
+
 ## Installation
 
 Das Windows-Release herunterladen und entpacken. Den **gesamten Ordner `KernDrum.vst3`**, einschließlich `Contents`, in einen von der DAW gescannten VST3-Ordner kopieren. Üblicher systemweiter Pfad: `C:\Program Files\Common Files\VST3` (kann Administratorrechte benötigen). Alternativ einen eigenen VST3-Suchpfad in der DAW verwenden. Danach Plugins neu scannen und KernDrum auf einer MIDI-Spur als Instrument laden.
@@ -14,7 +16,7 @@ Es gibt einen Stereo-Ausgang und keinen Audio-Eingang. Die Standalone-Datei ist 
 - **Stimmenwahl / Hit:** links eine Stimme auswählen; „Hit“ spielt sie zum Vorhören. Standardstimmen: Kick, Snare, Clap, Closed Hat, Open Hat, Low Tom, High Tom, Metal.
 - **Klang:** Pitch in Hz, Pitch env in Halbtönen (auch negativ), Pitch time und Decay in ms, Noise mix, Noise filter in Hz, Drive, Level, Pan. High-pass noise wechselt zwischen Tief- und Hochpass. Triangle tone blendet auf eine Dreiecksschwingung. Clap pulses ergänzt drei um 11 ms versetzte Hüllkurvenimpulse. Mute und Solo wirken pro Stimme; mehrere Solos sind möglich. Mute hat Vorrang.
 - **Sequencer:** DAW starten und „Sequencer“ einschalten. Ein Pattern ist ein 4/4-Takt aus 16 Sechzehnteln, unabhängig von der Taktart des Hosts. Klick schaltet einen Step an/aus; Rechtsklick setzt volle Anschlagstärke. Nach oben/unten ziehen verändert die Anschlagstärke. Die kleine Linie im Step zeigt ihren Wert.
-- **Swing:** 0 = gerade; 1 verzögert jeden zweiten Sechzehntel um eine Achtel-Sechzehntel-Paarhälfte, also 1/8 Viertelnote. Die Paarlänge bleibt gleich. Der Regler ist bewusst als Wert 0–1 dargestellt, nicht als klassischer Swing-Prozentsatz.
+- **Swing:** 0 = gerade; 1 verzögert jeden zweiten Step um eine 1/32-Note (75-%-Swing-Verhältnis). Die Paarlänge bleibt gleich. Der Regler ist als Wert 0–1 dargestellt, nicht als klassischer Swing-Prozentsatz.
 - **Patterns 1–4:** Auswahl schaltet im nächsten Audioblock um, ohne die Taktposition zurückzusetzen. „Copy to next“ überschreibt das nächste Pattern und wählt es an (4 → 1). „Clear pattern“ leert das gewählte Pattern. Diese Aktionen sind sofort wirksam.
 - **Kits:** Core, Weight, Spark im Menü wählen und „Load kit“ drücken. Dies ersetzt alle acht Klang-Einstellungen einschließlich Mute/Solo; Patterns bleiben erhalten. Pattern 1 enthält beim ersten Laden einen Ausgangsgroove, 2–4 sind leer.
 - **Output / Pegel:** Ausgangslautstärke oben rechts; zwei Peak-Anzeigen. Weiche Sättigung begrenzt den Ausgang unter 0 dBFS. Regler doppelklicken zum Ausgangswert der jeweiligen Stimme. Fenstergröße an den Rändern verändern.
