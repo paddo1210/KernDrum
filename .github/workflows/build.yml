@@ -1,0 +1,32 @@
+name: Windows VST3
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -A x64
+      - name: Build
+        run: cmake --build build --config Release --parallel 2
+      - name: Tests
+        run: ctest --test-dir build -C Release --output-on-failure
+      - name: Load built VST3
+        shell: pwsh
+        run: '& ./build/IntegrationTests_artefacts/Release/IntegrationTests.exe "$PWD/build/KernDrum_artefacts/Release/VST3/KernDrum.vst3"'
+      - name: Package
+        shell: pwsh
+        run: ./Package.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KernDrum-Windows-x64
+          path: |
+            dist/*.zip
+            dist/SHA256SUMS.txt
